@@ -8,7 +8,7 @@
 # re-add drop 
 # sudo iptables -A INPUT -j DROP
 
-echo "Adding elastic repo"
+echo "Adding logstash repo"
 
 # Add ES key / repo
 

@@ -18,6 +18,24 @@ sudo iptables -A INPUT -p icmp --icmp-type echo-request -j ACCEPT
 # Allow outbound ping
 sudo iptables -A INPUT -p icmp --icmp-type echo-reply -j ACCEPT
 
+
+##############################################
+#
+#
+# FOR VAGRANT HOST MACHINE - CAN BE DELETED
+
+sudo iptables -A INPUT -s 10.0.1.29 -j ACCEPT
+
+# Drop DS UDP to stop broadcast flooding syslog
+sudo iptables -A INPUT -s DS -p udp -j DROP
+
+#
+#
+##############################################
+
+# Drop DS UDP to stop broadcast flooding syslog
+sudo iptables -A INPUT -s DS -p udp -
+
 #  Log dropped traffic for 5min burst (Same Source IP/Port - stop log being flooded)
 sudo iptables -A INPUT -m limit --limit 5/min -j LOG --log-prefix "iptables denied: " --log-level 7
 
