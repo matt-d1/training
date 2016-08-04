@@ -1,7 +1,5 @@
 #!/bin/bash
 
-# Need to add SMTP to allow outgoing mails & setup connections for ELK
-
 # Add Loopback address for all (set -I INPUT 1 to set at first line else -A apend)
 
 sudo iptables -A INPUT -i lo -j ACCEPT
@@ -17,6 +15,21 @@ sudo iptables -A INPUT -p icmp --icmp-type echo-request -j ACCEPT
 
 # Allow outbound ping
 sudo iptables -A INPUT -p icmp --icmp-type echo-reply -j ACCEPT
+
+
+##############################################
+#
+#
+# FOR VAGRANT HOST MACHINE - CAN BE DELETED
+
+sudo iptables -A INPUT -s 10.0.1.29 -j ACCEPT
+
+# Drop DS UDP to stop broadcast flooding syslog
+sudo iptables -A INPUT -s DS -p udp -j DROP
+
+#
+#
+##############################################
 
 #  Log dropped traffic for 5min burst (Same Source IP/Port - stop log being flooded)
 sudo iptables -A INPUT -m limit --limit 5/min -j LOG --log-prefix "iptables denied: " --log-level 7
@@ -35,6 +48,3 @@ sudo cp ./.provision/config/iptablesload /etc/network/if-pre-up.d/iptablesload
 
 sudo chmod +x /etc/network/if-post-down.d/iptablessave
 sudo chmod +x /etc/network/if-pre-up.d/iptablesload
-
-#sudo apt-get install iptables-persistent -y
-#sudo invoke-rc.d iptables-persistent save
