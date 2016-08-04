@@ -7,4 +7,5 @@ ff00::0 ip6-mcastprefix
 ff02::1 ip6-allnodes
 ff02::2 ip6-allrouters
 ff02::3 ip6-allhosts
-10.0.1.32	elk1
+10.0.1.44	elk1
+10.0.1.32	elk2
