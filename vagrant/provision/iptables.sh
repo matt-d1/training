@@ -1,5 +1,10 @@
 #!/bin/bash
 
+# to clear all iptables
+# sudo iptables -F
+# sudo iptables -L --line-numbers -v
+
+
 # Add Loopback address for all (set -I INPUT 1 to set at first line else -A apend)
 
 sudo iptables -A INPUT -i lo -j ACCEPT
@@ -30,7 +35,6 @@ sudo iptables -A INPUT -s DS -p udp -j DROP
 #
 #
 ##############################################
-
 
 #  Log dropped traffic for 5min burst (Same Source IP/Port - stop log being flooded)
 sudo iptables -A INPUT -m limit --limit 5/min -j LOG --log-prefix "iptables denied: " --log-level 7
