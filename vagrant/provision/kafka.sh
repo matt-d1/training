@@ -13,13 +13,10 @@ PKG_MANAGER=$( command -v yum | grep yum || command -v $PKG_MANAGER | grep $PKG_
 # iptables remove drop
 	sudo iptables -D INPUT -j DROP
 
-# add http.port Defaults to 9200-9300
-	sudo iptables -A INPUT -p tcp --dport 9200:9300 -j ACCEPT
-	sudo iptables -A INPUT -p udp --dport 9200:9300 -j ACCEPT
+# iptables add zookeeper
 
-# transport.tcp.port - bind port range. Defaults to 9300-9400
-	sudo iptables -A INPUT -p tcp --dport 9300:9400 -j ACCEPT
-	sudo iptables -A INPUT -p udp --dport 9300:9400 -j ACCEPT
+	sudo iptables -A INPUT -p tcp --dport 2181 -j ACCEPT
+
 
 # re-add drop logging
 	sudo iptables -A INPUT -m limit --limit 5/min -j LOG --log-prefix "iptables denied: " --log-level 7
@@ -27,11 +24,16 @@ PKG_MANAGER=$( command -v yum | grep yum || command -v $PKG_MANAGER | grep $PKG_
 # re-add drop 
 	sudo iptables -A INPUT -j DROP
 
-echo "Adding elastic repo"
+echo "Adding jre"
+	sudo $PKG_MANAGER install default-jre
 
-# Add ES key / repo
+echo "Adding zookeeper"
 
-  	sudo wget -qO - https://packages.elastic.co/GPG-KEY-elasticsearch | sudo apt-key add -
+sudo $PKG_MANAGER install zookeeperd
+
+# Add kafka.tar 
+
+wget "http://mirror.cc.columbia.edu/pub/software/apache/kafka/0.8.2.1/kafka_2.11-0.8.2.1.tgz"
 
         # elasticsearch v2 not found
 
@@ -49,32 +51,22 @@ echo "Adding elastic repo"
         sudo update-rc.d elasticsearch defaults 95 10
 # sudo -i service elasticsearch start
 
+# copy env variables config file - set JVM size
+	cp ./.provision/config/elk_config/elasticsearch /etc/default/elasticsearch
+
 # copy elasticsearch config files to configure cluster - change to root first
 
-#	sudo su
+	sudo su
 
-	# copy env variables config file - set JVM size	
-	sudo cp ./.provision/config/elk_config/elasticsearch /etc/default/elasticsearch
+	cp ./.provision/config/elk_config/elasticsearch.yml /etc/elasticsearch/elasticsearch.yml
 
-#	exit
+	exit
 
 # Start service
 	sudo -i service elasticsearch start
 
-# set swapiness to 2 to reduce swap but not totally off
-# bootstrap.mlockall: true also set to stop process being swapped out
-
-sudo "echo 'vm.swappiness = 15' >> /etc/sysctl.conf"
-sudo sysctl -p
-# cat /proc/sys/vm/swappiness
+# Restart service 
+#	sudo service elasticsearch restart
 
 # check cluster status and print
 	echo | curl -XGET 'http://localhost:9200/_cluster/health?pretty=true'
-
-sudo cp ./.provision/config/elk_config/elasticsearch.yml /etc/elasticsearch/elasticsearch.yml
-
-# Restart service
-       sudo service elasticsearch restart
-
-# check cluster status and print
-        echo | curl -XGET 'http://localhost:9200/_cluster/health?pretty=true'

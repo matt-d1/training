@@ -1,5 +1,9 @@
 #!/bin/bash
 
+#  apt-get or yum depending on system
+PKG_MANAGER=$( command -v yum | grep yum || command -v apt-get | grep apt-get )
+
+
 # iptables remove drop
 sudo iptables -D INPUT -j DROP
 
@@ -20,8 +24,8 @@ echo "deb http://packages.elastic.co/kibana/4.5/debian stable main" | sudo tee -
 
 # Install Kibana
 # install dir /opt/kibana
-sudo apt-get update -y
-sudo apt-get install kibana
+sudo $PKG_MANAGER update -y
+sudo $PKG_MANAGER install kibana
 
 sudo update-rc.d kibana defaults 95 10
 sudo -i service kibana start
