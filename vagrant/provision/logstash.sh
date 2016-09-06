@@ -8,7 +8,7 @@
 # re-add drop 
 # sudo iptables -A INPUT -j DROP
 
-echo "Adding elastic repo"
+echo "Adding logstash repo"
 
 # Add ES key / repo
 
@@ -21,3 +21,7 @@ echo "deb https://packages.elastic.co/logstash/2.3/debian stable main" | sudo te
 # Install dir is
 	sudo apt-get update -y
         sudo apt-get install logstash 
+
+# Copy configs	
+	sudo cp ./.provision/config/elk_config/logstash_default.conf /etc/logstash/conf.d/logstash_default.conf
+	sudo cp ./.provision/config/elk_config/logstash /etc/default/logstash

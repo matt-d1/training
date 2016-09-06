@@ -10,10 +10,7 @@ sudo iptables -A INPUT -p tcp --dport 80 -j ACCEPT
 # re-add drop 
 sudo iptables -A INPUT -j DROP
 
-# save iptables
-sudo invoke-rc.d iptables-persistent save
-
-echo "Adding elastic repo"
+echo "Adding kibana repo"
 
 # Add ES key / repo
 wget -qO - https://packages.elastic.co/GPG-KEY-elasticsearch | sudo apt-key add -

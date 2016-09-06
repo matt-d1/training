@@ -42,8 +42,6 @@
 
  bootstrap.mlockall: true
 
-ES_HEAP_SIZE: 1g
-
 # Make sure that the `ES_HEAP_SIZE` environment variable is set to about half the memory
 # available on the system and that the owner of the process is allowed to use this limit.
 #

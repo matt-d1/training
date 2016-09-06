@@ -31,6 +31,7 @@ sudo iptables -A INPUT -s DS -p udp -j DROP
 #
 ##############################################
 
+
 #  Log dropped traffic for 5min burst (Same Source IP/Port - stop log being flooded)
 sudo iptables -A INPUT -m limit --limit 5/min -j LOG --log-prefix "iptables denied: " --log-level 7
 
