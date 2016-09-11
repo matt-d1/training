@@ -51,30 +51,27 @@ echo "Adding elastic repo"
 
 # copy elasticsearch config files to configure cluster - change to root first
 
-#	sudo su
+	sudo su
 
 	# copy env variables config file - set JVM size	
 	sudo cp ./.provision/config/elk_config/elasticsearch /etc/default/elasticsearch
+	
+	# change swappiness to 15 from 60 - mlockall
+	sudo echo 'vm.swappiness = 15' >> /etc/sysctl.conf
+	sudo sysctl -p
 
-#	exit
-
-# Start service
-	sudo -i service elasticsearch start
-
-# set swapiness to 2 to reduce swap but not totally off
-# bootstrap.mlockall: true also set to stop process being swapped out
-
-sudo "echo 'vm.swappiness = 15' >> /etc/sysctl.conf"
-sudo sysctl -p
 # cat /proc/sys/vm/swappiness
 
-# check cluster status and print
-	echo | curl -XGET 'http://localhost:9200/_cluster/health?pretty=true'
+	exit
+
 
 sudo cp ./.provision/config/elk_config/elasticsearch.yml /etc/elasticsearch/elasticsearch.yml
 
+# Start service
+        sudo -i service elasticsearch start
+
 # Restart service
-       sudo service elasticsearch restart
+#       sudo service elasticsearch restart
 
 # check cluster status and print
-        echo | curl -XGET 'http://localhost:9200/_cluster/health?pretty=true'
+       echo | curl -XGET 'http://localhost:9200/_cluster/health?pretty=true'
