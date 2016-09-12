@@ -1,12 +1,7 @@
 #!/bin/bash
 
-#  apt-get or yum depending on system
-PKG_MANAGER=$( command -v yum | grep yum || command -v apt-get | grep apt-get )
-
-	sudo $PKG_MANAGER update -y
-
 # install curl
- 	sudo $PKG_MANAGER install curl
+ 	sudo apt-get install curl
 
 # iptables remove drop logging to allow ES port first
 	sudo iptables -D INPUT -m limit --limit 5/min -j LOG --log-prefix "iptables denied: " --log-level 7
@@ -42,41 +37,38 @@ echo "Adding elastic repo"
 
 # echo "deb https://packages.elastic.co/elasticsearch/5.x/debian stable main" | sudo tee -a /etc/apt/sources.list.d/elasticsearch-5.x.list
 
-echo "Install Elasticserach"
+
 # Install Elasticserach
 # Install dir is /usr/share/elasticsearch/
-	sudo $PKG_MANAGER update -y
-        sudo $PKG_MANAGER install elasticsearch
+	sudo apt-get update -y
+        sudo apt-get install elasticsearch
         sudo update-rc.d elasticsearch defaults 95 10
-
-echo "Elasticsearch install complete"
-
-# sudo ./.provision/elastic_root.sh
+# sudo -i service elasticsearch start
 
 # copy elasticsearch config files to configure cluster - change to root first
 
-        #sudo su
+#	sudo su
 
-        # copy env variables config file - set JVM size
-        sudo cp ./.provision/config/elk_config/elasticsearch /etc/default/elasticsearch
+	# copy env variables config file - set JVM size	
+	sudo cp ./.provision/config/elk_config/elasticsearch /etc/default/elasticsearch
 
-        # change swappiness to 15 from 60 - mlockall
-        sudo echo 'vm.swappiness = 15' >> /etc/sysctl.conf
-        sudo sysctl -p
-
-# cat /proc/sys/vm/swappiness
-
-
-echo "Copying elasticsearch.yml"
-sudo cp ./.provision/config/elk_config/elasticsearch.yml /etc/elasticsearch/elasticsearch.yml
-
-echo "start elasticsearch service"
+#	exit
 
 # Start service
-        sudo -i service elasticsearch start
+#	sudo -i service elasticsearch start
+
+# set swapiness to 2 to reduce swap but not totally off
+# bootstrap.mlockall: true also set to stop process being swapped out
+
+sudo "echo 'vm.swappiness = 15' >> /etc/sysctl.conf"
+sudo sysctl -p
+# cat /proc/sys/vm/swappiness
+
+sudo cp ./.provision/config/elk_config/elasticsearch.yml /etc/elasticsearch/elasticsearch.yml
 
 # Restart service
-#       sudo service elasticsearch restart
+	sudo -i service elasticsearch start
+       # sudo service elasticsearch restart
 
 # check cluster status and print
-#       echo | curl -XGET 'http://localhost:9200/_cluster/health?pretty=true'
+        echo | curl -XGET 'http://localhost:9200/_cluster/health?pretty=true'
