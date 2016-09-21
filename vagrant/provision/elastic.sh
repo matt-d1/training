@@ -8,25 +8,9 @@ PKG_MANAGER=$( command -v yum | grep yum || command -v apt-get | grep apt-get )
 # install curl
  	sudo $PKG_MANAGER install curl
 
-# iptables remove drop logging to allow ES port first
-	sudo iptables -D INPUT -m limit --limit 5/min -j LOG --log-prefix "iptables denied: " --log-level 7
-
-# iptables remove drop
-	sudo iptables -D INPUT -j DROP
-
-# add http.port Defaults to 9200-9300
-	sudo iptables -A INPUT -p tcp --dport 9200:9300 -j ACCEPT
-	sudo iptables -A INPUT -p udp --dport 9200:9300 -j ACCEPT
-
-# transport.tcp.port - bind port range. Defaults to 9300-9400
-	sudo iptables -A INPUT -p tcp --dport 9300:9400 -j ACCEPT
-	sudo iptables -A INPUT -p udp --dport 9300:9400 -j ACCEPT
-
-# re-add drop logging
-	sudo iptables -A INPUT -m limit --limit 5/min -j LOG --log-prefix "iptables denied: " --log-level 7
-
-# re-add drop 
-	sudo iptables -A INPUT -j DROP
+echo "Adding ES iptables rules"
+# iptables_elastic.sh
+	./.provision/iptables_elastic.sh
 
 echo "Adding elastic repo"
 
@@ -47,7 +31,6 @@ echo "Install Elasticserach"
 # Install dir is /usr/share/elasticsearch/
 	sudo $PKG_MANAGER update -y
         sudo $PKG_MANAGER install elasticsearch
-        sudo update-rc.d elasticsearch defaults 95 10
 
 echo "Elasticsearch install complete"
 
@@ -72,11 +55,16 @@ sudo cp ./.provision/config/elk_config/elasticsearch.yml /etc/elasticsearch/elas
 
 echo "start elasticsearch service"
 
+
+sudo /bin/systemctl daemon-reload
+sudo /bin/systemctl enable elasticsearch.service
+sudo /bin/systemctl start elasticsearch.service
+
 # Start service
-        sudo -i service elasticsearch start
+#        sudo -i service elasticsearch start
 
 # Restart service
 #       sudo service elasticsearch restart
 
 # check cluster status and print
-#       echo | curl -XGET 'http://localhost:9200/_cluster/health?pretty=true'
+       echo | curl -XGET 'http://localhost:9200/_cluster/health?pretty=true'

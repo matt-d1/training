@@ -27,9 +27,12 @@ echo "deb http://packages.elastic.co/kibana/4.5/debian stable main" | sudo tee -
 sudo $PKG_MANAGER update -y
 sudo $PKG_MANAGER install kibana
 
+# copy config to localhost
+
+sudo cp ./.provision/config/elk_config/kibana.yml /opt/kibana/config/
+
 sudo update-rc.d kibana defaults 95 10
 sudo -i service kibana start
 
-# copy config to localhost
-
-sudo cp ./.provision/config/kibana.yml /opt/kibana/config/
+# Restart service
+#       sudo service kibana restart
