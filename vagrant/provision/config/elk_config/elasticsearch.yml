@@ -52,8 +52,9 @@
 # Set the bind address to a specific IP (IPv4 or IPv6):
 #
 
-network.bind_host: localhost
+# network.host: localhost
 
+ network.host: ${HOSTNAME}
 #
 # Set a custom port for HTTP:
 #
