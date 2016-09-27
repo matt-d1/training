@@ -18,7 +18,8 @@ echo "Adding logstash repo"
 
 wget -qO - https://packages.elastic.co/GPG-KEY-elasticsearch | sudo apt-key add -
 
-echo "deb https://packages.elastic.co/logstash/2.3/debian stable main" | sudo tee -a /etc/apt/sources.list
+# echo "deb https://packages.elastic.co/logstash/2.3/debian stable main" | sudo tee -a /etc/apt/sources.list
+echo "deb https://packages.elastic.co/logstash/2.4/debian stable main" | sudo tee -a /etc/apt/sources.list
 
 
 # Install Logstash 
@@ -29,3 +30,5 @@ echo "deb https://packages.elastic.co/logstash/2.3/debian stable main" | sudo te
 # Copy configs	
 	sudo cp ./.provision/config/elk_config/logstash_default.conf /etc/logstash/conf.d/logstash_default.conf
 	sudo cp ./.provision/config/elk_config/logstash /etc/default/logstash
+
+sudo /etc/init.d/logstash start
