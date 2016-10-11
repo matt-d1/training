@@ -8,10 +8,6 @@ PKG_MANAGER=$( command -v yum | grep yum || command -v apt-get | grep apt-get )
 # install curl
  	sudo $PKG_MANAGER install curl
 
-echo "Adding ES iptables rules"
-# iptables_elastic.sh
-	./.provision/iptables_elastic.sh
-
 echo "Adding elastic repo"
 
 # Add ES key / repo
@@ -59,6 +55,7 @@ echo "start elasticsearch service"
 sudo /bin/systemctl daemon-reload
 sudo /bin/systemctl enable elasticsearch.service
 sudo /bin/systemctl start elasticsearch.service
+# sudo update-rc.d elasticsearch defaults 95 10
 
 # Start service
 #        sudo -i service elasticsearch start

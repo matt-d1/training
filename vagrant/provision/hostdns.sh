@@ -7,7 +7,7 @@ sudo cp ./.provision/config/hosts /etc/hosts
 ETC_HOSTS=/etc/hosts
 
 #find all ip
-IP=$(ifconfig | grep -oE '((1?[0-9][0-9]?|2[0-4][0-9]|25[0-5])\.){3}(1?[0-9][0-9]?|2[0-4][0-9]|25[0-5])' | grep 10.0.1 | grep -v 10.0.1.255)
+IP=$(ifconfig | grep -oE '((1?[0-9][0-9]?|2[0-4][0-9]|25[0-5])\.){3}(1?[0-9][0-9]?|2[0-4][0-9]|25[0-5])' | grep 10.0.1 | grep -v .255)
 
 # Hostname to add/remove.
 HOSTNAME=$(hostname)
