@@ -19,7 +19,7 @@
 
 # Heap size defaults to 256m min, 1g max
 # Set ES_HEAP_SIZE to 50% of available RAM, but no more than 31g
-ES_HEAP_SIZE=1g
+ES_HEAP_SIZE=256m
 
 # Heap new generation
 #ES_HEAP_NEWSIZE=
@@ -47,8 +47,8 @@ ES_GC_LOG_FILE=/var/log/elasticsearch/gc.log
 # Note that this setting is only used by the init script. If changed, make sure that
 # the configured user can read and write into the data, work, plugins and log directories.
 # For systemd service, the user is usually configured in file /usr/lib/systemd/system/elasticsearch.service
-#ES_USER=elasticsearch
-#ES_GROUP=elasticsearch
+ES_USER=elasticsearch
+ES_GROUP=elasticsearch
 
 # The number of seconds to wait before checking if Elasticsearch started successfully as a daemon process
 ES_STARTUP_SLEEP_TIME=5
