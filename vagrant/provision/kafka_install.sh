@@ -1,9 +1,9 @@
 #!/bin/bash
 
-./.provision/iptables.sh
-# ./.provision/upgrade.sh
 ./.provision/hostdns.sh
-./.provision/common.sh
-./.provision/java8.sh
+./.provision/iptables.sh
 ./.provision/iptables_kafka.sh
+./.provision/rsyslog.sh
+./.provision/common.sh
+./.provision/upgrade.sh
 ./.provision/kafka.sh

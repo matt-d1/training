@@ -2,18 +2,24 @@
 
 echo "Adding iptables for Kafka ports"
 
-# iptables remove drop logging to allow add at eof
-        sudo iptables -D INPUT -m limit --limit 5/min -j LOG --log-prefix "iptables denied: " --log-level 7
+# Remove IPTables drop rules
+        ./.provision/iptables_remove_drop.sh
 
-# iptables remove drop
-        sudo iptables -D INPUT -j DROP
+# Kafka default port Allow anyone to connect
+# NEEDS TO BE CHANGED LATER!
+	sudo iptables -A INPUT -s 10.0.0.0/32 -p tcp --dport 9092 -j ACCEPT
 
-# iptables add zookeeper
+# zookeeper clients connect to 2181
+# zookeeper servers 2888:3888
+	
+	sudo iptables -A INPUT -s KAFKA1 -p tcp --dport 2888:3888 -j ACCEPT
+	sudo iptables -A INPUT -s KAFKA2 -p tcp --dport 2888:3888 -j ACCEPT	
+	
+	sudo iptables -A INPUT -s KAFKA1 -p tcp --dport 2181 -j ACCEPT
+        sudo iptables -A INPUT -s KAFKA2 -p tcp --dport 2181 -j ACCEPT
 
-        sudo iptables -A INPUT -p tcp --dport 2181 -j ACCEPT
+	sudo iptables -A INPUT -s ELK1 -p tcp --dport 2181 -j ACCEPT
+        sudo iptables -A INPUT -s ELK2 -p tcp --dport 2181 -j ACCEPT
 
-# re-add drop logging
-        sudo iptables -A INPUT -m limit --limit 5/min -j LOG --log-prefix "iptables denied: " --log-level 7
-
-# re-add drop
-        sudo iptables -A INPUT -j DROP
+# Add IPTables drop rules
+        ./.provision/iptables_drop.sh
