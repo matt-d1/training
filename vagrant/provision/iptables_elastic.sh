@@ -18,3 +18,6 @@
 
 # Add IPTables drop rules
         ./.provision/iptables_drop.sh
+	
+# For AWS centos
+# sudo /sbin/service iptables save
