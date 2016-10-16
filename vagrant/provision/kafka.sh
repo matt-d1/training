@@ -18,12 +18,16 @@ echo "Adding zookeeper"
 
 sudo $PKG_MANAGER install zookeeperd
 
+exit
+
 # Add kafka.tar 
 
 wget "http://mirror.cc.columbia.edu/pub/software/apache/kafka/0.8.2.1/kafka_2.11-0.8.2.1.tgz"
 
 sudo tar -zxvf kafka_2.11-0.8.2.1.tgz 
-sudo mv kafka_2.11-0.8.2.1 /usr/local/kafka
+sudo mv kafka_2.11-0.8.2.1 /usr/local/kafka_2.11-0.8.2.1
+
+sudo ln -s /usr/local/kafka_2.11-0.8.2.1 /usr/local/kafka
 
 sudo cp ./.provision/config/elk_config/kafka/server.properties /usr/local/kafka/config/
 
