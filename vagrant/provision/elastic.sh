@@ -40,7 +40,7 @@ echo "Elasticsearch install complete"
         sudo cp ./.provision/config/elk_config/elasticsearch /etc/default/elasticsearch
 
         # change swappiness to 15 from 60 - mlockall
-        sudo echo 'vm.swappiness = 15' >> /etc/sysctl.conf
+        sudo echo 'vm.swappiness = 2' >> /etc/sysctl.conf
         sudo sysctl -p
 
 # cat /proc/sys/vm/swappiness
