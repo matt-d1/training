@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #Copy current hosts to server
-sudo cp ./.provision/config/hosts /etc/hosts
+sudo cp ./config/hosts /etc/hosts
 
 # PATH TO YOUR HOSTS FILE
 ETC_HOSTS=/etc/hosts
@@ -26,4 +26,4 @@ if [ -n "$(grep $HOSTNAME /etc/hosts)" ]
             sudo -- sh -c -e "echo '$HOSTS_LINE' >> /etc/hosts"
 
 #Copy hosts back to provision dir 
-sudo cp /etc/hosts ./.provision/config/hosts
+sudo cp /etc/hosts ./config/hosts
