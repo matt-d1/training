@@ -2,8 +2,11 @@
 
 # update, upgrade and remove no longer required
 
-	sudo apt-get update
-	sudo apt-get upgrade -y
-	sudo dpkg --configure -a
-	sudo apt-get -f install
-	sudo apt-get autoremove -y
+#  apt-get or yum depending on system 
+PKG_MANAGER=$( command -v yum | grep yum || command -v apt-get | grep apt-get )
+
+	sudo $PKG_MANAGER update
+#	sudo $PKG_MANAGER upgrade -y
+#	sudo dpkg --configure -a
+	sudo $PKG_MANAGER -f install
+#	sudo $PKG_MANAGER autoremove -y
